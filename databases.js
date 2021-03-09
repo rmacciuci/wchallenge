@@ -12,27 +12,14 @@
  */
 
 // Incluimos controladores, modelos, schemas y modulos
+
 const mongoose  = require('mongoose');
-const mysql     = require('mysql');
-
 mongoose.Promise = global.Promise;
-
 
 const Databases = {
     connections: [],
     async connect(db_names) {
         // Buscamos los datos de las bases de datos en el archivo ENV
-        if(db_names.includes('MYSQL')){
-            let { MYSQL_HOST:host, MYSQL_USER:user, MYSQL_PASS:pass, MYSQL_PORT:port, MYSQL_DB:db } = process.env;
-            if(!host || !user || !pass || !db) throw new Error('Parametros de DB no definidos en .ENV File');
-
-            if(!port) { port = 3306; }
-
-            let c = new MySQL(port, host, user, pass, db);
-            c = await c.connect();
-            this.connections.push(["MySQL", port, db]);
-            c.end();
-        }
         if(db_names.includes('MONGODB')){
             let { MONGODB_HOST:host, MONGODB_USER:user, MONGODB_PASS:pass, MONGODB_PORT:port, MONGODB_DB:db } = process.env;
             if(!host || !user || !pass || !db) throw new Error('Parametros de DB no definidos en .ENV File');
@@ -57,32 +44,6 @@ const Databases = {
             console.log('   ');
         }
         console.log('-----------------------------------------------------')
-    }
-}
-
-class MySQL {
-    constructor(port, host, user, pass, database) {
-        this.port       = port      || false;
-        this.host       = host      || false;
-        this.user       = user      || '';
-        this.pass       = pass      || '';
-        this.database   = database  || false;
-    }
-
-    async connect() {
-        const c = mysql.createConnection({
-            host: this.host,
-            user: this.user,
-            password: this.pass,
-            database: this.database
-        });
-        try {
-            await c.connect();
-            return c;
-        } catch (e) {
-            console.log('Error en la conexion con MySQL');
-            throw e;
-        }
     }
 }
 
@@ -111,8 +72,6 @@ class Mongo {
             throw e;
         }
     }
-
-
 }
 
 module.exports = {

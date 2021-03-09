@@ -1,20 +1,20 @@
 /**
- * @fileoverview Database for app users
+ * @fileoverview Tokens Schema
  *
  * @version 1.0
  *
  * 
  * @author Ramiro Macciuci <ramimacciuci@gmail.com>
- * @copyright RM Dev - Argentina
+ * @copyright Ramiro Macciuci - Argentina
  *
  * History:
  * 1.0 - Version principal
  */
- // Incluimos controladores, modelos, schemas y modulos
-
+// Incluimos modulos externos
 const mongoose          = require('mongoose');
 const Schema            = mongoose.Schema;
 
+// Incluimos modulos internos
 const helper            = require("../../helper");
 
 const table = new Schema({

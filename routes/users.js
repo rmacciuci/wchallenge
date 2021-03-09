@@ -1,5 +1,5 @@
 /**
- * @fileoverview Routes for users
+ * @fileoverview Users routes
  *
  * @version 1.0
  *
@@ -10,19 +10,20 @@
  * History:
  * 1.0 - Version principal
  */
-// Incluimos controladores, modelos, schemas y modulos
+// Incluimos modulos externos
 const express = require('express');
 
 const router  = express.Router();
 
+// Incluimos controladores
 const controllers = {
     users: require('../controllers/users')
 }
 
 // Methods
-// router.get("/:id?", controllers.users.get);
+router.get("/", controllers.users.get);
 // router.put("/:id?", controllers.users.modify);
 // router.delete("/:id", controllers.users.delete);
-// router.post("/", controllers.users.new);
+router.post("/", controllers.users.new);
 
 module.exports = router;

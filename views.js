@@ -30,7 +30,6 @@ class Views {
      * @returns {}
      */
     async custom_response(code = 200, Success = true, Message = "", data = {}, user = false) {
-        const { Notifications } = require('./modules/notifications/models/notifications');
         let return_schema = {
             Success,
             Message,
@@ -40,18 +39,13 @@ class Views {
         if(Object.keys(data).length > 0) {
             return_schema.Data = data;
         }
+
         if(user === false && this.res.authUser) {
             return_schema.loggedUser = this.res.authUser ? Views.get_loggedUser_object(this.res.authUser) : user;
-        }else {
+        } else {
             return_schema.loggedUser = user;
         }
 
-        if(return_schema.loggedUser) {
-            const { id } = return_schema.loggedUser;
-            if(id) {
-                return_schema.Notifications = await Notifications.get(id);
-            }
-        }
         return this.res.status(code).send(return_schema);
     }
 
@@ -72,10 +66,6 @@ class Views {
             active_teacher_account: user.active_teacher_account,
             teacher_available_services: user.teacher_available_services
         }
-    }
-
-    test() {
-        return this.custom_response(200, true, "La API Responde correctamente al test");
     }
 
     delete(data = {}) {

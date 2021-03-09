@@ -1,5 +1,5 @@
 /**
- * @fileoverview Routes for base
+ * @fileoverview Main Routes
  *
  * @version 1.0
  *
@@ -10,23 +10,16 @@
  * History:
  * 1.0 - Version principal
  */
-// Incluimos controladores, modelos, schemas y modulos
+// Incluimos modulos externos
 const express = require('express');
-
 const router  = express.Router();
 
+// Incluimos controladores
 const controllers = {
-    main: require('../controllers/main'),
-    users: require('../controllers/users'),
-    clients: require('../controllers/clients')
+    main: require('../controllers/main')
 }
 
 // Methods
-router.post("/login/:section", controllers.main.login);
-router.post("/signup", controllers.clients.signup);
-router.get("/verify", controllers.main.verify);
-router.get("/futils", controllers.main.futils);
-router.all("/test", controllers.main.test);
-router.all("/pwrecovery", controllers.users.pwrecovery);
+router.post("/login", controllers.main.login);
 
 module.exports = router;

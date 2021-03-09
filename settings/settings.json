@@ -9,7 +9,8 @@
             "expiresIn": 86400
         },
         "routesNotToken": [
-            ["POST","login", "*"]
+            ["POST","login", "*"],
+            ["POST","users", "*"]
         ],
         "whiteListCors": []
     }

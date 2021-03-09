@@ -11,37 +11,41 @@
  * 1.0 - Version principal
  */
 
-// Incluimos controladores, modelos, schemas y modulos
+// Incluimos modulos externos
 const jwt                   = require('jsonwebtoken');
 const fs                    = require('fs');
 
+// Incluimos modulos internos
 const { configfile }        = require('../helper');
 const Views                 = require('../views');
-const Permissions           = require('../models/permissions');
 
+// token keys
 const TOKEN_PASS    = fs.readFileSync('token.key','utf-8');
 const cert          = fs.readFileSync('token.pub','utf-8');
 
 // Models, Schemas & Controllers
 const schemas = {
-    token: require('../db/migrations/token.table'),
-    roles: require('../db/migrations/roles.table')
+    token: require('../db/schemas/token.table')
 };
 
 const models = {
-    users: require('../models/users'),
-    clients: require('../models/clients')
+    users: require('../models/users')
 };
 
 class Auth {
-    constructor(user, section) {
+    constructor(user) {
         this.user = user;
-        this.section = section;
         return this;
     }
 
+    /**
+     * Eliminamos los tokens viejos en base a los parametros configurados en los archivos de configuracion
+     */
     async delete_old_tokens() {
+        // Obtenemos los tokens del usuario
         const tokens = await schemas.token.find({ userId: this.user._id }).sort({ createdAt: -1 });
+
+        // Obtenemos los valores de seguridad para los tokens
         const { sessions_by_user } = configfile.security;
         const { expiresIn } = configfile.security.token;
         const now = Date.now();
@@ -51,7 +55,6 @@ class Auth {
         let session_number = 1;
         for(let i = 0; i < tokens.length; i++) {
             const token = tokens[i];
-
             if(session_number >= sessions_by_user) {
                 // sumamos el token para eliminarlo
                 Tokens_to_delete.push(token._id);
@@ -73,40 +76,53 @@ class Auth {
         return true;
     }
 
+    /**
+     * Creamos un token
+     * @param {Any} sessionId 
+     */
     async create_token(sessionId = false) {
-        const { _id:id, role, name, last_name, email } = this.user;
+        const { _id:id, name, last_name, user_name } = this.user;
 
         let session_to_insert = sessionId || (Date.parse(new Date)).toString() + id;
 
-        const token_data = {
+        const TOKEN_DATA = {
             id,
-            role,
             name,
             last_name,
-            email,
+            user_name,
             sessionId: session_to_insert
         }
-        // console.log(configfile.security.token)
-        const token = jwt.sign(token_data, TOKEN_PASS, configfile.security.token);
+        try {
+            const token = jwt.sign(TOKEN_DATA, TOKEN_PASS, configfile.security.token);
         
-        let c = new schemas.token({
-            userId: id,
-            token,
-            sessionId: token_data.sessionId
-        })
-        c.save();
-
-        return token;
+            let c = new schemas.token({
+                userId: id,
+                token,
+                sessionId: TOKEN_DATA.sessionId
+            })
+    
+            await c.save(); // Guardamos el token en la bbdd
+            return token;
+        } catch (e) {
+            throw e;
+        }
     }
 }
 
+/**
+ * Middelware que chequea el token ingresado. Si la ruta esta incluida en el archivo de configuracion entonces no lo solicitará, en caso contrario hara multiples verificaciones de seguridad.
+ * @param {Object} req 
+ * @param {Object} res 
+ * @param {Object} next 
+ */
 async function checkToken(req, res, next) {
+
     // Obtenemos los valores de la ubicacion 3 y 4 de la url
     let url = req.url;
     url = url.split('?')[0]; // Quitamos los queries
     url = [url.split('/')[3] || false, url.split('/')[4] || false];
     
-    const { routesNotToken } = configfile.security;
+    const { routesNotToken } = configfile.security; // Obtenemos las rutas que no requeriran token
 
     for(const [ method, module, route ] of routesNotToken) {
         if(url && url[0] != module) continue;
@@ -116,34 +132,39 @@ async function checkToken(req, res, next) {
             return;
         }
     }
-
+    // Creamos el objeto de respuesta
     const response = new Views(res);
 
-    let token = req.headers.authorization;
-    if(!token) return response.message("Token no especificado");
-    const [ auth_type, auth_token ] = token.split(" ");
-    if(auth_type != 'Bearer') return response.message("Tipo de authorization invalida");
-
     try {
+        let token = req.headers.authorization;
+        if(!token) throw new Error("Token no especificado");
+
+        const [ auth_type, auth_token ] = token.split(" ");
+        if(auth_type != 'Bearer') throw new Error("Tipo de authorization invalida");
+
         const token_response = await jwt.verify(auth_token, cert, { algorithms: ["RS256"] });
         if(token_response) {
+
             // Buscamos el token
             const token_verification = await schemas.token.findOne({ token: auth_token });
-            if(!token_verification || token_verification.userId != token_response.id) return response.message("Token adulterado");
+            if(!token_verification || token_verification.userId != token_response.id) throw new Error("Token adulterado");
+            
             let user;
-            user = await models.users.get_loggin_user_data(token_response.id);
+            user = await models.users.get_loggin_user_data(token_response.id); // Obtenemos los datos del usuario logeado segun el token
 
             user.token  = auth_token;
+
+            // Guardamos los datos del usuario logeado en los objetos req y res
             req.authUser = user;
             res.authUser = user;
+
             next();
             return;
-        }
+        } else throw new Error("Error en el token");
     } catch (e) {
         console.log(e);
-        console.log("Err: ", e.message);
-        response.message("Error en token: Err:" + e.message);
+        return response.message("Error en token: Err:" + e.message);
     }
 }
 
-module.exports = { checkToken, Auth, get_response };
+module.exports = { checkToken, Auth };

@@ -1,0 +1,19 @@
+{
+  "name": "wchallenge",
+  "version": "1.0.0",
+  "description": "Cryptocurrencies Monitor",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Rmacciuci/wchallenge.git"
+  },
+  "author": "Ramiro Macciuci",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Rmacciuci/wchallenge/issues"
+  },
+  "homepage": "https://github.com/Rmacciuci/wchallenge#readme"
+}

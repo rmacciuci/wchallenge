@@ -1,0 +1,16 @@
+{
+    "main": {
+        "route": "/api/v1"
+    },
+    "security": {
+        "sessions_by_user": 1,
+        "token": {
+            "algorithm": "RS256",
+            "expiresIn": 86400
+        },
+        "routesNotToken": [
+            ["POST","login", "*"]
+        ],
+        "whiteListCors": []
+    }
+}

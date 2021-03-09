@@ -22,16 +22,17 @@ const schemas = {
     users: require('../db/schemas/users.table')
 };
 class User {
-    constructor({ name, last_name, user_name, password }) { 
-        this.name           = name;
-        this.last_name      = last_name;
-        this.user_name      = user_name;
-        this.password       = password;
+    constructor({ name, last_name, user_name, password, preferred_currency }) { 
+        this.name               = name;
+        this.last_name          = last_name;
+        this.user_name          = user_name;
+        this.password           = password;
+        this.preferred_currency = preferred_currency;
     }
 
     async save() {
         // Verificamos los valores requeridos
-        const required_values = ["name", "last_name", "user_name", "password"];
+        const required_values = ["name", "last_name", "user_name", "password", "preferred_currency"];
         const [verify, this_object] = helper.verify_object_from_array(this, required_values, []);
         if(verify) throw new Error(verify);
 
@@ -47,6 +48,9 @@ class User {
             this_object.password = check_password
         }
 
+        const PERMITED_CURRENCIES = ["EUR", "ARG", "USD"];
+        if(!PERMITED_CURRENCIES.includes(this_object.preferred_currency)) throw new Error("Error en el tipo de moneda ingresada");
+
         let user        = new schemas.users(this_object);
         user            = await user.save();
 
@@ -60,8 +64,16 @@ class User {
         const query = await schemas.users.findById(id);
         if(!query) throw new Error("Usuario inexistente");
         else {
-            const { _id: id, name, last_name, user_name, createdAt, updatedAt } = query;
-            return { id, name, last_name, user_name, createdAt, updatedAt }
+            const { _id: id, name, last_name, user_name, createdAt, updatedAt, preferred_currency } = query;
+            return { 
+                id, 
+                name, 
+                last_name, 
+                user_name, 
+                createdAt, 
+                updatedAt, 
+                preferred_currency 
+            }
         }
     }
 

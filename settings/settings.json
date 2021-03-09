@@ -10,7 +10,7 @@
         },
         "routesNotToken": [
             ["POST","login", "*"],
-            ["POST","users", "*"]
+            ["POST","user", "*"]
         ],
         "whiteListCors": []
     }

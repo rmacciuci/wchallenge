@@ -19,35 +19,32 @@ const Views = require('../views');
 
 // Incluimos Controladores, Modelos & Schemas
 const models = {
-    users: require('../models/users')
+    top_coins: require('../models/top_coins')
 };
 
 const controller = {
     get: async (req, res) => {
         const response = new Views(res);
         
-        models.users.get(req.authUser.id).then(v => {
-            if(!v) return response.message("Error al obtener usuarios")
+        models.top_coins.get(req.authUser.id).then(v => {
+            if(!v) return response.message("Error al obtener las monedas favoritas")
             else return response.get(v);
         }).catch(e => {
             console.log("Error: ", e);
             return response.message(e.message);
         })
     },
-    new: async (req, res) => {
+    toggle_favorite_coin: async (req, res) => {
         const response = new Views(res);
 
-        if(!req.body) return response.message("Error en los parametros enviados");
-        
-        const user = new models.users(req.body);
-        user.save().then(v => {
-            if(!v) return response.message("Error al crear usuario")
-            else return response.create(v);
+        const { coin_id } = req.params;
+        models.top_coins.toggle_assign(req.authUser.id, coin_id).then(v => {
+            if(!v) return response.message("Error interno")
+            else return response.update(v);
         }).catch(e => {
             console.log("Error: ", e);
             return response.message(e.message);
         })
-        
     }
 }
 

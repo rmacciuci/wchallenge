@@ -22,8 +22,6 @@ const controllers = {
 
 // Methods
 router.get("/", controllers.users.get);
-// router.put("/:id?", controllers.users.modify);
-// router.delete("/:id", controllers.users.delete);
 router.post("/", controllers.users.new);
 
 module.exports = router;

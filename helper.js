@@ -20,7 +20,6 @@ const password_hash = require('password-hash');
 
 const controller = {
     configfile: JSON.parse(fs.readFileSync("./settings/settings.json")),
-    external_api_keys: JSON.parse(fs.readFileSync("./settings/external_api_keys.json")),
     get_custom_variables_for_get_methods: ({ order = 'DESC', orderBy = 'createdAt', limit = 10, offset = 0 }) => {
         let sort_return    = {};
         let skip_return    = 0;

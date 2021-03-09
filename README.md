@@ -1,48 +1,35 @@
-# RM API
+# WChallenge - Wolox
 
-Explicaremos como crear la api de base para todos los proyectos. Se utilizaran las siguientes tecnologias.
+Las tecnologías utilizadas son:
 - NodeJS
 - ExpressJS
 - Mongodb
-- MySQL
-- Docker 
+- Jest
 
 ### Requisitos
 Es necesario, tener instalado en nuestra PC las siguientes herramientas.
 
 1. nodejs & npm
 2. git
-3. mysql
-4. docker.io
-5. mongodb
-
+3. mongodb
 
 ### Pasos
 
-1. Creamos la carpeta del proyecto
-`$ mkdir name-of-project`
+1. Clonamos el repositorio
+`$ git clone https://github.com/Rmacciuci/wchallenge`
 
-2. iniciamos package.json
-`$ npm init`
+2. Instalamos el proyecto
+`$ npm install`
 
-	Una vez generado con los datos que solicita modificamos las siguientes lineas: 
+3. Creamos el archivo de variables de entorno (.env) con la estructura que esta en el archivo de ejemplo (.env.example)
 
-	```json 
-		{
-			"scripts": {
-				"start": "nodemon ./index.js"
-				"seed_user": "node ./bin/seed_user.js"
-			},
-		  "author": {
-				"name": "Ramiro Macciuci",
-				"email": "ramimacciuci@gmail.com",
-				"url": "https://ramiromacciuci.com.ar"
-		  },
-		}
-	```
-3. iniciamos el repositorio de GIT luego de haberlo creado en la web donde lo alojaremos
-	`$ git init`
+4. Si lo deseamos, testeamos el proyecto
+	`$ npm test`
 
-4. Clonamos el siguiente repositorio
+5. Iniciamos el proyecto
+	`$ npm start`
 
-	`$ git clone https://github.com/Rmacciuci/api-base-rm`
+### Datos del autor
+
+Ramiro Macciuci - Ciudad de Buenos Aires.
++54 11 2174 2416 | ramimacciuci@gmail.com

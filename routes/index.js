@@ -20,6 +20,7 @@ const helper        = require('../helper');
 const routesPath    = helper.configfile.main.route;
 
 app.use(`${routesPath}/`, require('./base')); // custom routes
-app.use(`${routesPath}/users`, require('./users')); // users routes
+app.use(`${routesPath}/user`, require('./user')); // users routes
+app.use(`${routesPath}/top_coins`, require('./top_coins')); // top_coins routes
 
 module.exports = app;

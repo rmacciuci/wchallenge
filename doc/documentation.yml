@@ -1,0 +1,387 @@
+openapi: 3.0.0
+servers:
+  - description: LocalHost
+    url: http://localhost:8000
+info:
+  description: Ejercicio técnico para Wolox
+  version: "1.0.0"
+  title: wchallenge - Wolox
+  contact:
+    email: ramimacciuci@gmail.com
+    name: Ramiro Macciuci
+    url: https://ramiromacciuci.com.ar
+tags:
+  - name: With Token
+    description: Request with tokens
+  - name: With not token
+    description: Operations sin token
+paths:
+  /login:
+    post:
+      tags: 
+        - With not token
+        - Main
+      summary: User login
+      operationId: login
+      description: User login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginSchema'
+      responses:
+        '202':
+          description: User logged
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessModel'
+        '400':
+          description: Invalid Password
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+  /coins:
+    get:
+      tags:
+        - Coins
+        - With Token
+      summary: Get coins
+      operationId: get_coins
+      description: Get coins
+      parameters:
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/offsetParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Success: 
+                    type: boolean
+                    example: true
+                  Message: 
+                    type: string
+                  Data: 
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        symbol:
+                          type: string
+                        price:
+                          type: integer
+                        name:
+                          type: string
+                        image:
+                          type: string
+                        last_updated:
+                          type: string
+                          format: date-time
+                  HttpCodeResponse:
+                    type: integer
+                    example: 200
+        '400':
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+  /top_coins/{coin_id}:
+    put:
+      tags:
+        - Coins
+        - With Token
+      summary: get my tops coins
+      operationId: modify_top_coins
+      description: Get my top coins
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Success: 
+                    type: boolean
+                    example: true
+                  Message: 
+                    type: string
+                  Data: 
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        symbol:
+                          type: string
+                        price:
+                          type: integer
+                        name:
+                          type: string
+                        image:
+                          type: string
+                        last_updated:
+                          type: string
+                          format: date-time
+                        prices:
+                          type: object
+                          properties:
+                            usd:
+                              type: integer
+                            eur:
+                              type: integer
+                            ars:
+                              type: integer
+                  HttpCodeResponse:
+                    type: integer
+                    example: 200
+        '400':
+          description: Error al actualizar el registro
+      parameters:
+        - name: coin_id
+          in: path
+          required: true
+          description: Coin ID
+          schema:
+            type: string
+  /top_coin:
+    get:
+      tags:
+        - Coins
+        - With Token
+      summary: get my tops coins
+      operationId: get_top_coins
+      description: Get my top coins
+      parameters:
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/orderParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Success: 
+                    type: boolean
+                    example: true
+                  Message: 
+                    type: string
+                  Data: 
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        symbol:
+                          type: string
+                        price:
+                          type: integer
+                        name:
+                          type: string
+                        image:
+                          type: string
+                        last_updated:
+                          type: string
+                          format: date-time
+                        prices:
+                          type: object
+                          properties:
+                            usd:
+                              type: integer
+                            eur:
+                              type: integer
+                            ars:
+                              type: integer
+                  HttpCodeResponse:
+                    type: integer
+                    example: 200
+        '400':
+          description: Error al obtener las tops coins 
+  /user:
+    get:
+      tags:
+        - Users
+        - With Token
+      summary: get my user data
+      operationId: get_user
+      description: Get my user data
+      responses:
+        '200':
+          description: User Data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserModel'
+        '400':
+          description: Inexistent User
+    post:
+      tags:
+        - With Token
+        - Users
+      summary: Create new user
+      operationId: add_user
+      description: Add new user
+      responses:
+        '200':
+          description: Usuario creado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserModel'
+        '400':
+          description: 'Error al crear el usuario'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignUpSchema'
+security:
+  - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT 
+  parameters:
+    orderParam:
+      name: order
+      in: query
+      description: orden segun precio (only DESC / ASC)
+      schema:
+        type: string
+        example: DESC
+        default: DESC
+    limitParam: 
+      name: limit
+      in: query
+      description: max records to return
+      schema:
+        type: integer
+        format: int32
+    offsetParam:
+      name: offset
+      in: query
+      description: records skip
+      schema:
+        type: integer
+        format: int32
+  schemas:
+    ErrorModel:
+      type: object
+      properties:
+        Success:
+          type: boolean
+          example: false
+        Message:
+          type: string
+        HttpCodeResponse:
+          type: integer
+        loggedUser:
+          type: object
+    SuccessModel:
+      type: object
+      properties:
+        Success:
+          type: boolean
+          example: true
+        Message:
+          type: string
+          example: Usuario logeado correctamente
+        HttpCodeResponse:
+          type: integer
+          example: 202
+        loggedUser:
+          type: object
+          example: 
+            token: ""
+            id: ""
+            name: ""
+            last_name: ""
+            user_name: ""
+            preferred_currency: ""
+    UserModel:
+      type: object
+      properties:
+        Success:
+          type: boolean
+          example: true
+        Message:
+          type: string
+        Data:
+          type: object
+          properties:
+            id: 
+              type: string
+            name: 
+              type: string
+            last_name: 
+              type: string
+            user_name: 
+              type: string
+            preferred_currency: 
+              type: string
+        HttpCodeResponse:
+          type: integer
+        loggedUser:
+          type: object
+          example: 
+            token: ""
+            id: ""
+            name: ""
+            last_name: ""
+            user_name: ""
+            preferred_currency: ""
+        
+    LoginSchema:
+      type: object
+      required: 
+        - user_name
+        - password
+      properties:
+        user_name:
+          type: string
+          example: rmacciuci
+        password:
+          type: string
+          format: password
+    SignUpSchema:
+      type: object
+      required:
+        - name
+        - last_name
+        - user_name
+        - password
+        - preferred_currency
+      properties:
+        name:
+          type: string
+          example: Ramiro
+        last_name:
+          type: string
+          example: Macciuci
+        user_name:
+          type: string
+          example: rmacciuci
+        password:
+          type: string
+          format: password
+          minLength: 8
+          description: Aphanumeric password
+          example: example1234
+        preferred_currency:
+          type: string
+          description: only accept usa, eur, ars
+          example: ars

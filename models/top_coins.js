@@ -30,41 +30,39 @@ const Top_Coins = {
     get: async (user_id, search_params = {}) => {
         if(!user_id) throw new Error("Error en los parametros enviados");
 
-        const [ sort, skip, limit ] = helper.get_custom_variables_for_get_methods(search_params);
+        // Agregamos los parametros de busqueda por defecto
+        let order = search_params.order || "current_price_desc";
+        let limit = search_params.limit > 25 || !search_params.limit ? 25 : search_params.limit;
 
         // Obtenemos los datos del usuario para saber su moneda preferida
         const user = await models.users.get(user_id);
         if(!user) throw new Error("Usuario inexistente")
 
         // Obtenemos las monedas preferidas del usuario
-        const query = await schemas.top_coins.find({ user_id }).limit(limit).skip(skip).sort(sort);
+        const query = await schemas.top_coins.find({ user_id });
         if(query.length === 0) throw new Error("El usuario no tiene monedas asignadas");
 
         // generamos un array con todos los IDs para hacer la consulta
         const coins_ids = [query.map(coin => coin.coin_id)];
 
         // Hacemos el request de monedas y precios
-        const all_coins     = await models.coingecko.get(coins_ids, user.preferred_currency);
+        const all_coins     = await models.coingecko.get(coins_ids, user.preferred_currency, { order, limit });
         const coins_prices  = await models.coingecko.get_prices(coins_ids, ["usd", "ars", "eur"]);
 
         let return_data = [];
-        for(const { coin_id } of query) {
-            // Obtenemos los datos de la moneda
-            const money = all_coins.find(elem => elem.id === coin_id);
-
-            // Obtenemos los precios de todas las cotizaciones
-            const prices = coins_prices[coin_id];
-
-            if(!money || !prices) continue; // Si la moneda no existe entonces la salteamos
+        for(const money of all_coins) {
+            // Obtenemos los precios de esta cotizacion
+            const prices = coins_prices[money.id];
+            
             const aux = {
                 id: money.id,
                 symbol: money.symbol,
                 name: money.name,
                 image: money.image,
+                preferred_currency: user.preferred_currency,
                 last_updated: money.last_updated,
                 prices
             }
-
             return_data.push(aux)
         }
         return return_data;

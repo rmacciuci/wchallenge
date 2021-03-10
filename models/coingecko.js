@@ -32,10 +32,12 @@ const Coingecho = {
         // Seteamos parametros de busqueda
         const limit     = search_params.limit || 50;
         const offset    = search_params.offset || 0;
+        const order     = search_params.order  || 'market_cap_desc'; // Fijamos el orden DESC dependiendo ranking
 
         let url = `${BASE_URL}/coins/markets`; // Seteamos la URL
         url += `?vs_currency=${preferred_currency}`; // Agregamos la moneda a la consulta
         url += `&per_page=${limit}&page=${offset}`; // Agregamos los parametros de busqueda a la URL.
+        url += `&order=${order}`; // Agregamos el parametro de orden
 
         // Agregamos los IDs en caso de requerirlos
         if(ids && ids instanceof Array && ids.length > 0) {

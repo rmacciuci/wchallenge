@@ -26,7 +26,7 @@ const controller = {
     get: async (req, res) => {
         const response = new Views(res);
         
-        models.top_coins.get(req.authUser.id).then(v => {
+        models.top_coins.get(req.authUser.id, req.query).then(v => {
             if(!v) return response.message("Error al obtener las monedas favoritas")
             else return response.get(v);
         }).catch(e => {

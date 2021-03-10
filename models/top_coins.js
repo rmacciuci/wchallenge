@@ -31,7 +31,7 @@ const Top_Coins = {
         if(!user_id) throw new Error("Error en los parametros enviados");
 
         // Agregamos los parametros de busqueda por defecto
-        let order = search_params.order || "current_price_desc";
+        let order = search_params.order?.toUpperCase() || "DESC";
         let limit = search_params.limit > 25 || !search_params.limit ? 25 : search_params.limit;
 
         // Obtenemos los datos del usuario para saber su moneda preferida
@@ -46,14 +46,19 @@ const Top_Coins = {
         const coins_ids = [query.map(coin => coin.coin_id)];
 
         // Hacemos el request de monedas y precios
-        const all_coins     = await models.coingecko.get(coins_ids, user.preferred_currency, { order, limit });
+        let all_coins     = await models.coingecko.get(coins_ids, user.preferred_currency);
         const coins_prices  = await models.coingecko.get_prices(coins_ids, ["usd", "ars", "eur"]);
 
+        // Ordenamos los resultados por cotización ya que coingecko no dispone del parametro oderBy price.
+        all_coins = all_coins.sort((a,b) => order === 'DESC' ? b.price - a.price : a.price - b.price);
+ 
         let return_data = [];
         for(const money of all_coins) {
+            // Forzamos el limite ya que coingecko no dispone de order by price por lo tanto debemos ordenarlo con una funcion de JS.
+            if(return_data.length >= limit) break;
             // Obtenemos los precios de esta cotizacion
             const prices = coins_prices[money.id];
-            
+
             const aux = {
                 id: money.id,
                 symbol: money.symbol,

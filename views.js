@@ -55,16 +55,8 @@ class Views {
             id: user.id,
             name: user.name,
             last_name: user.last_name,
-            gender: user.gender,
-            email: user.email,
-            dni: user.dni,
-            active: user.active,
-            verified: user.verified,
-            role: user.role,
-            imagen: user.profile_image,
-            permissions: user.permissions,
-            active_teacher_account: user.active_teacher_account,
-            teacher_available_services: user.teacher_available_services
+            user_name: user.user_name,
+            preferred_currency: user.preferred_currency
         }
     }
 

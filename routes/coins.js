@@ -1,5 +1,5 @@
 /**
- * @fileoverview Top Coins routes
+ * @fileoverview Coins routes
  *
  * @version 1.0
  *
@@ -17,11 +17,10 @@ const router  = express.Router();
 
 // Incluimos controladores
 const controllers = {
-    top_coins: require('../controllers/top_coins')
+    coins: require('../controllers/coins')
 }
 
 // Methods
-router.put("/:coin_id", controllers.top_coins.toggle_favorite_coin);
-router.get("/", controllers.top_coins.get);
+router.get("/", controllers.coins.get);
 
 module.exports = router;

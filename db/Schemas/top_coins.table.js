@@ -18,29 +18,16 @@ const Schema            = mongoose.Schema;
 const helper            = require("../../helper");
 
 const table = new Schema({
-    name: {
+    user_id: {
         type: String,
         required: true
     },
-    last_name: {
+    coin_id: {
         type: String,
         required: true,
-    },
-    user_name: {
-        type: String,
-        required: true,
-        unique: true
-    },
-    password: {
-        type: String,
-        required: true
-    },
-    preferred_currency: {
-        type: String,
-        enum: ["usd", "ars", "eur"]
     }
 }, {
     timestamps: true
 });
 
-module.exports = mongoose.model(helper.getDatabaseName('users'), table);
+module.exports = mongoose.model(helper.getDatabaseName('top_coins'), table);

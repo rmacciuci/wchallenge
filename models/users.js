@@ -48,7 +48,7 @@ class User {
             this_object.password = check_password
         }
 
-        const PERMITED_CURRENCIES = ["EUR", "ARG", "USD"];
+        const PERMITED_CURRENCIES = ["eur", "ars", "usd"];
         if(!PERMITED_CURRENCIES.includes(this_object.preferred_currency)) throw new Error("Error en el tipo de moneda ingresada");
 
         let user        = new schemas.users(this_object);

@@ -9,12 +9,14 @@
  * @copyright Ramiro Macciuci - Argentina
  * 
  * History:
- * 1.0 - Version principal
+ * First version
  */
 
 // Include external modules
 const express       = require('express');
 const app           = express();
+
+// Include internal modules
 const helper        = require('../helper');
 
 const routesPath    = helper.configfile.main.route;

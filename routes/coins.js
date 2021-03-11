@@ -8,11 +8,10 @@
  * @copyright Ramiro Macciuci - Argentina
  *
  * History:
- * 1.0 - Version principal
+ * First version
  */
 // Include external modules
 const express = require('express');
-
 const router  = express.Router();
 
 // Include controllers

@@ -7,11 +7,10 @@
  * @copyright Ramiro Macciuci - Argentina
  * 
  * History:
- * 1.0 - Version principal
+ * First version
  */
 
 // Include internal modules
-const helper = require('../helper');
 const Views = require('../views');
 
 // Include Controllers, Modules & Schemas

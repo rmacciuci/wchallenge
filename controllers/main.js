@@ -7,7 +7,7 @@
  * @copyright Ramiro Macciuci - Argentina
  * 
  * History:
- * 1.0 - Version principal
+ * First version
  */
 
 // Include external modules
@@ -15,7 +15,6 @@ const fs        = require('fs');
 
 // Include internal modules
 const { Auth }  = require('../middlewares/authentication');
-const helper    = require('../helper');
 const Views     = require('../views');
 
 // Include Controllers, Modules & Schemas

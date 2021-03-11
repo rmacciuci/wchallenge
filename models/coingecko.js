@@ -7,7 +7,7 @@
  * @copyright Ramiro Macciuci - Argentina
  * 
  * History:
- * 1.0 - Version principal
+ * First version
  */
 
 // Include external modules

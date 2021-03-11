@@ -7,12 +7,11 @@
  * @copyright Ramiro Macciuci - Argentina
  * 
  * History:
- * 1.0 - Version principal
+ * First version
  */
 
 // Include external modules
 const password_hash = require('password-hash');
-const jwt           = require('jsonwebtoken');
 
 // Include internal modules
 const helper        = require('../helper');

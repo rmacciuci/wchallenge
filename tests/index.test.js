@@ -1,19 +1,17 @@
 
-// Incluimos modulos externos
+// Include external modules
 const request = require('supertest');
 
-// Incluimos modulos internos
+// Include internal modules
 const app       = require('../app');
 
-// Conectamos a la base de datos
+// Connect to mongodb
 const connection = require('../databases').Databases.connect(["MONGODB"]);
 
 // Mocks
-const { 
-    MockUser, 
-} = require('./mocks');
+const { MockUser } = require('./mocks');
 
-// Incluimos controladores, modelos y schemas
+// Include Controllers, Models & Schemas
 const models = {
     users: require('../models/users'),
     top_coins: require('../models/top_coins'),
@@ -25,24 +23,24 @@ const schemas = {
     top_coins: require('../db/schemas/top_coins.table.js')
 }
 
+/** This function return a valid token */
 async function Get_Token_Test() {
     // Obtenemos el id del usuario de test
     let user = await schemas.users.find({ user_name: MockUser.user_name });
     const { _id } = user[0];
 
-    MockUser._id = _id; // Agregamos el ID al mock
+    MockUser._id = _id; // Add user id to mock object
 
     let token = new models.auth(MockUser);
     await token.delete_old_tokens();
     return await token.create_token();
 }
 
-const BASE_URL = '/api/v1';
+const BASE_URL = '/api/v1'; // Endpoints base URL.
 
 describe('User Tests', () => {
-    describe('POST /user', () => {
+    describe('POST /user (signup)', () => {
         it('should be true (unique user)', async (done) => {
-            // Creamos el usuario y lo eliminamos 
             const res = await request(app)
                         .post(BASE_URL + '/user')
                         .send(MockUser)
@@ -54,25 +52,12 @@ describe('User Tests', () => {
 
             done();
         });
-
-        it('should be false (unique user)', async (done) => {
-            // Creamos el usuario y lo eliminamos 
-            const res = await request(app)
-                        .post(BASE_URL + '/user')
-                        .send(MockUser)
-                        .set('Accept', 'application/json')
-
-            expect(res.statusCode).toEqual(400);    
-            expect(res.body).toBeDefined();
-            expect(res.body.Success).toBeFalsy();
-            done();
-        });
     });
 })
 
 describe('Coins test', () => {
     describe('GET /coins', () => {
-        // Obtenemos todas las monedas 
+        // Get all coins
         it('should obtein all coins', async done => {
             const TOKEN = await Get_Token_Test();
             const res = await request(app)
@@ -84,14 +69,12 @@ describe('Coins test', () => {
             expect(res.body).toBeDefined();
             expect(res.body.Data).toBeDefined();
 
-            // Verificamos que esten definidas las claves esperadas
+            // Verify that the required schema by Wolox is defined
             expect(Object.keys(res.body.Data[0]).sort()).toEqual(['id', 'symbol', 'price', 'image', 'last_updated', 'name'].sort());
 
             done();
         })
     });
-
-
 
     describe('PUT /top_coins/:coin_id, should be true', () => {
         it('ADD Bitcoin to top N', async done => {
@@ -124,7 +107,7 @@ describe('Coins test', () => {
     });
 
     describe('GET /top_coins', () => {
-        // Optenemos las top coins del usuario
+        // Get users top coins
         it('order by cotizacion DESC', async done => {
             const TOKEN = await Get_Token_Test();
             const res = await request(app)
@@ -136,11 +119,11 @@ describe('Coins test', () => {
             expect(res.body).toBeDefined();
             expect(res.body.Data.length).toBe(2);
 
-            // Ordenamos la respuesta y solo dejamos el id y el precio (solo en USD)
+            // response sort and filter id and price (only in USD)
             let short_data  = res.body.Data.map(e => { return {id: e.id, price: e.prices.usd} });
             res.body.Data   = res.body.Data.map(e => { return {id: e.id, price: e.prices.usd} })
         
-            // Ordenamos el array en orden descendente
+            // Sort desc array
             short_data = short_data.sort((a,b) => b.price - a.price);
 
             expect(res.body.Data).toEqual(short_data);
@@ -159,11 +142,11 @@ describe('Coins test', () => {
             expect(res.body).toBeDefined();
             expect(res.body.Data.length).toBe(2);
 
-            // Ordenamos la respuesta y solo dejamos el id y el precio (solo en USD)
+            // response sort and filter id and price (only in USD)
             let short_data  = res.body.Data.map(e => { return {id: e.id, price: e.prices.usd} });
             res.body.Data   = res.body.Data.map(e => { return {id: e.id, price: e.prices.usd} })
         
-            // Ordenamos el array en orden ascendente
+            // Sort asc array
             short_data = short_data.sort((a,b) => a.price - b.price);
 
             expect(res.body.Data).toEqual(short_data);

@@ -5,24 +5,23 @@
  *
  * 
  * @author Ramiro Macciuci <ramimacciuci@gmail.com>
- * @copyright RM Dev - Argentina
+ * @copyright Ramiro Macciuci - Argentina
  *
  * History:
  * 1.0 - Version principal
  */
 
-// Incluimos controladores, modelos, schemas y modulos
-
+// Include external modules
 const mongoose  = require('mongoose');
 mongoose.Promise = global.Promise;
 
 const Databases = {
     connections: [],
     async connect(db_names) {
-        // Buscamos los datos de las bases de datos en el archivo ENV
+        // Get a connections data from .ENV file
         if(db_names.includes('MONGODB')){
             let { MONGODB_HOST:host, MONGODB_USER:user, MONGODB_PASS:pass, MONGODB_PORT:port, MONGODB_DB:db } = process.env;
-            if(!host || !user || !pass || !db) throw new Error('Parametros de DB no definidos en .ENV File');
+            if(!host || !user || !pass || !db) throw new Error('undefined database parameters');
 
             if(!port) { port = 27017; }
 
@@ -35,8 +34,9 @@ const Databases = {
         this.logMessages()
         return true;
     },
+    /** This function return a log message in console from database connection status */
     logMessages() {
-        console.log('--------------- DATABASES CONNECTIONS ---------------')
+        console.log('--------------- DATABASE CONNECTIONS ---------------')
         console.log('   ');
         for(let c = 0; c < this.connections.length; c++) {
             const [ type, port, database ] = this.connections[c];

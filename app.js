@@ -1,5 +1,5 @@
 /**
- * @fileoverview Archivo principal de la API
+ * @fileoverview Main Express.JS file
  * 
  * @version 1.0
  * 
@@ -11,38 +11,35 @@
  * 1.0 - Version principal
  */
 
-// Mains includes
+// Include external modules
 const express       = require("express");
 const cors          = require('cors');
 const file_upload   = require('express-fileupload');
 const body_parser   = require('body-parser');
 const os            = require('os');
 const morgan        = require('morgan');
-const { configfile } = require("./helper");
 
+// Include internal modules
+const { configfile } = require("./helper");
 const { checkToken } = require("./middlewares/authentication");
 
-const app = express(); // Iniciamos express
+const app = express(); // Init express
 global.baseUrl      = require('path').resolve();
 
-require('dotenv').config();
-// Views
-app.set('view engine', 'pug');
+require('dotenv').config(); // Import .env
 
 // Body parser
 app.use(body_parser.urlencoded({ extended: true }));
 
-
-// app.use(express.static(__dirname + '/public'));
-app.use(morgan('dev'));
 app.use(file_upload());
 app.use(body_parser.json());
 
 if(process.env.NODE_ENV == 'development'){
+    app.use(morgan('dev'));
     console.log('CORS Inactive')
-    app.use(cors()) // Permitimos todos los request sin importar providencia
+    app.use(cors()) // Permit all request
 }else {
-    const whiteListURLS = configfile.security.whiteListCors; // Lista de URLs permitidas en producción, especificadas en el archivo de configuracion.
+    const whiteListURLS = configfile.security.whiteListCors; // permitted URL list
     console.log('CORS active', whiteListURLS)
     let crs = function (req, callback) {
         var corsOptions;
@@ -56,8 +53,8 @@ if(process.env.NODE_ENV == 'development'){
     app.use(cors(crs))
 }
 
-app.use(checkToken);
+app.use(checkToken); // CheckToken middleware
 
-app.use(require('./routes/index'));
+app.use(require('./routes/index')); // Import main route file
 
 module.exports = app;

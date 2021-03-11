@@ -1,19 +1,18 @@
 /**
- * @fileoverview Archivo de entrada principal, conexion principal a bases de datos
+ * @fileoverview Project entry file
  * 
  * @version 1.0
  * 
  * 
  * @author Ramiro Macciuci <ramimacciuci@gmail.com>
- * @copyright RM Developer - Argentina
+ * @copyright Ramiro Macciuci - Argentina
  * 
  * History:
  * 1.0 - Version principal
  */
 
-// Main includes
+// Include internal modules
 const app           = require('./app');
-
 const { Databases } = require('./databases');
 
 require('dotenv').config();
@@ -29,6 +28,3 @@ Databases.connect(["MONGODB"]).then(v => {
 }).catch(e => {
     console.log("Error: ", e);
 })
-
-
-// Other includes

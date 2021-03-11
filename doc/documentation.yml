@@ -5,16 +5,16 @@ servers:
 info:
   description: Ejercicio técnico para Wolox
   version: "1.0.0"
-  title: wchallenge - Wolox
+  title: WChallenge - Wolox
   contact:
     email: ramimacciuci@gmail.com
     name: Ramiro Macciuci
     url: https://ramiromacciuci.com.ar
 tags:
   - name: With Token
-    description: Request with tokens
+    description: token operations
   - name: With not token
-    description: Operations sin token
+    description: tokenless operations
 paths:
   /login:
     post:
@@ -23,7 +23,7 @@ paths:
         - Main
       summary: User login
       operationId: login
-      description: User login
+      description: This method is used to login
       requestBody:
         content:
           application/json:
@@ -31,7 +31,7 @@ paths:
               $ref: '#/components/schemas/LoginSchema'
       responses:
         '202':
-          description: User logged
+          description: User logged correctly
           content:
             application/json:
               schema:
@@ -49,13 +49,13 @@ paths:
         - With Token
       summary: Get coins
       operationId: get_coins
-      description: Get coins
+      description: Get all coins order by market_cap_desc
       parameters:
         - $ref: '#/components/parameters/limitParam'
         - $ref: '#/components/parameters/offsetParam'
       responses:
         '200':
-          description: OK
+          description: Coins
           content:
             application/json:
               schema:
@@ -98,9 +98,9 @@ paths:
       tags:
         - Coins
         - With Token
-      summary: get my tops coins
+      summary: toggle add coin
       operationId: modify_top_coins
-      description: Get my top coins
+      description: This method assigns or unassigns a coin.
       responses:
         '200':
           description: OK
@@ -145,7 +145,7 @@ paths:
                     type: integer
                     example: 200
         '400':
-          description: Error al actualizar el registro
+          description: Error
       parameters:
         - name: coin_id
           in: path
@@ -160,7 +160,7 @@ paths:
         - With Token
       summary: get my tops coins
       operationId: get_top_coins
-      description: Get my top coins
+      description: Get my top coins (default order by price desc)
       parameters:
         - $ref: '#/components/parameters/limitParam'
         - $ref: '#/components/parameters/orderParam'
@@ -208,7 +208,7 @@ paths:
                     type: integer
                     example: 200
         '400':
-          description: Error al obtener las tops coins 
+          description: Error
   /user:
     get:
       tags:
@@ -235,13 +235,13 @@ paths:
       description: Add new user
       responses:
         '200':
-          description: Usuario creado correctamente
+          description: OK
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserModel'
         '400':
-          description: 'Error al crear el usuario'
+          description: Error
       requestBody:
         content:
           application/json:

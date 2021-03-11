@@ -31,5 +31,5 @@ Es necesario, tener instalado en nuestra PC las siguientes herramientas.
 
 ### Datos del autor
 
-Ramiro Macciuci - Ciudad de Buenos Aires.
-+54 11 2174 2416 | ramimacciuci@gmail.com
+- Ramiro Macciuci - Ciudad de Buenos Aires.
+- +54 11 2174 2416 | ramimacciuci@gmail.com

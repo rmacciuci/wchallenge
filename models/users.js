@@ -101,6 +101,16 @@ class User {
         if(!password_hash.verify(password, originPass)) throw new Error('Contraseña Erronea');
         else return user;
     }
+
+    /**
+     * Delete user - Only used for tests
+     * @param {string} user_name 
+     */
+    static async delete(user_name) {
+        if(!user_name) throw new Error("Error en los parametros enviados");
+
+        return await schemas.users.deleteOne({ user_name });
+    }
 }
 
 module.exports = User;

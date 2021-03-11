@@ -24,6 +24,7 @@ const models = {
 
 const controller = {
     get: async (req, res) => {
+        return res.send(true);  
         const response = new Views(res);
         
         models.users.get(req.authUser.id).then(v => {

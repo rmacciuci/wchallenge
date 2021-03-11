@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
+    "test:watch": "jest --watch",
     "dev": "nodemon index.js",
     "start": "node index.js"
   },
@@ -13,6 +14,9 @@
     "url": "git+https://github.com/Rmacciuci/wchallenge.git"
   },
   "author": "Ramiro Macciuci",
+  "jest": {
+    "testEnvironment": "node"
+  },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/Rmacciuci/wchallenge/issues"

@@ -134,17 +134,17 @@ async function checkToken(req, res, next) {
 
     try {
         let token = req.headers.authorization;
-        if(!token) throw new Error("Token no especificado");
+        if(!token) throw new Error("not specified token");
 
         const [ auth_type, auth_token ] = token.split(" ");
-        if(auth_type != 'Bearer') throw new Error("Tipo de authorization invalida");
+        if(auth_type != 'Bearer') throw new Error("Invalid authorization type");
 
         const token_response = await jwt.verify(auth_token, cert, { algorithms: ["RS256"] });
         if(token_response) {
 
             // Buscamos el token
             const token_verification = await schemas.token.findOne({ token: auth_token });
-            if(!token_verification || token_verification.userId != token_response.id) throw new Error("Token adulterado");
+            if(!token_verification || token_verification.userId != token_response.id) throw new Error("adulterated token");
             
             let user;
             user = await models.users.get(token_response.id); // Get a logged user object
@@ -157,10 +157,10 @@ async function checkToken(req, res, next) {
 
             next();
             return;
-        } else throw new Error("Error en el token");
+        } else throw new Error("Error in token");
     } catch (e) {
         console.log(e);
-        return response.message("Error en token: Err:" + e.message);
+        return response.message("Error in token. Err:" + e.message);
     }
 }
 

@@ -70,7 +70,7 @@ class User {
         if(!id) throw new Error("Error in sended values");
 
         const query = await schemas.users.findById(id);
-        if(!query) throw new Error("Usuario inexistente");
+        if(!query) throw new Error("Inexistent user");
         else {
             const { _id: id, name, last_name, user_name, createdAt, updatedAt, preferred_currency } = query;
             return { 
@@ -95,7 +95,7 @@ class User {
 
         // Buscamos si existe el usuario 
         let user = await schemas.users.find({ user_name });
-        if(user.length === 0) throw new Error("Usuario inexistente");
+        if(user.length === 0) throw new Error("Inexistent user");
         user = user[0];
 
         let originPass = user.password;

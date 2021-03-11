@@ -1,7 +1,7 @@
 openapi: 3.0.0
 servers:
   - description: LocalHost
-    url: http://localhost:8000
+    url: http://localhost:8000/api/v1
 info:
   description: Ejercicio técnico para Wolox
   version: "1.0.0"

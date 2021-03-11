@@ -6,24 +6,32 @@ exports.MockUser = {
     preferred_currency: "ars"
 }
 
-exports.MockLogin = {
-    user_name: "test",
-    password: "test"
-}
-exports.MockToken = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwNDdkZGI5NWY5NmQ5MWIyZmZiYmIwMSIsIm5hbWUiOiJSYW1pcm8iLCJsYXN0X25hbWUiOiJNYWNjaXVjaSIsInVzZXJfbmFtZSI6InJtYWNjaXVjaSIsInNlc3Npb25JZCI6IjE2MTUzNzk2OTIwMDA2MDQ3ZGRiOTVmOTZkOTFiMmZmYmJiMDEiLCJpYXQiOjE2MTUzNzk2OTIsImV4cCI6MTYxNTQ2NjA5Mn0.WB49qvqPF_OGqyK9HIa52U2IesklUZaRY7fCen2YEUPkcvHyfv6zCm9pwvYOmWxaLnPqm2ltT27dWx9ts2A8szhoPN6ZnFYuuqiilS6jh1klIwgY1QbiVpFHtoB8G2D5Y8sx_BWnpQ8Eu-afgaTz-1nsD-299Aqc7TKuSaJjeorJF6MK1AAY72XLuLI-Zy9wfMNSooHS-mDbhs6_ZyikZqbrJsJeF-4TqkLkjoaLk18uProXDK10-NLcCOhdAmakbpVMO_AWKbpIA2y5uAwIGKW7MzzSrSrR4GeqMd2oqhxMhsEG5Rm0p3f57g8c7qo8HdoJAm8BNQuwNvJbumFzgQ";
-
-exports.MockCreateUser = {
-    Success: true,
-    Message: 'Registro creado correctamente',
-    HttpCodeResponse: 200,
-    Data: {
-        id: '60491d207377770e36122658',
-        name: 'Tester',
-        last_name: 'Tester',
-        user_name: 'test',
-        createdAt: '2021-03-10T19:25:20.406Z',
-        updatedAt: '2021-03-10T19:25:20.406Z',
-        preferred_currency: 'ars'
+exports.MockTopCoins = [
+    {
+        "id": "wrapped-bitcoin",
+        "symbol": "wbtc",
+        "name": "Wrapped Bitcoin",
+        "image": "https://assets.coingecko.com/coins/images/7598/large/wrapped_bitcoin_wbtc.png?1548822744",
+        "preferred_currency": "ars",
+        "last_updated": "2021-03-11T05:29:16.415Z",
+        "prices": {
+            "usd": 55647,
+            "ars": 5048338,
+            "eur": 46659
+        }
     },
-    loggedUser: false
-}
+    {
+        "id": "bitcoin",
+        "symbol": "btc",
+        "name": "Bitcoin",
+        "image": "https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579",
+        "preferred_currency": "ars",
+        "last_updated": "2021-03-11T05:30:15.558Z",
+        "prices": {
+            "usd": 55576,
+            "ars": 5041898,
+            "eur": 46600
+        }
+    }
+]
+

@@ -1,17 +1,17 @@
 /**
- * @fileoverview Estructura de respuesta principal
+ * @fileoverview Schema of main response
  * 
  * @version 1.0
  * 
  * 
  * @author Ramiro Macciuci <ramimacciuci@gmail.com>
- * @copyright RM Dev - Argentina
+ * @copyright Ramiro Macciuci - Argentina
  * 
  * History:
  * 1.0 - Version principal
  */
 
-// Incluimos controladores, modelos, schemas y modulos
+// Include external modules
 const path   = require('path');
 class Views {
     constructor(res) {
@@ -19,13 +19,13 @@ class Views {
     }
 
     /**
-     * Funcion default para responses, crea la estructura unica de respuesta
+     * Default function to response schema
      * 
-     * @param {Boolean} Success true si no hay errores
-     * @param {Number}  code codigo de respuesta HTTP
-     * @param {String}  Message mensaje para agregar a la respuesta
-     * @param {object}  data respuesta principal de información
-     * @param {object}  user usuario logeado, default = false, y buscara el usuario logeado con su respectivo token
+     * @param {Boolean} Success 
+     * @param {Number}  code 
+     * @param {String}  Message
+     * @param {object}  data
+     * @param {object}  user
      * 
      * @returns {}
      */
@@ -61,27 +61,19 @@ class Views {
     }
 
     delete(data = {}) {
-        return this.custom_response(200, true, "Registro eliminado correctamente", data);
+        return this.custom_response(200, true, "Record deleted successfully", data);
     }
 
     create(data = {}) {
-        return this.custom_response(200, true, "Registro creado correctamente", data);
+        return this.custom_response(200, true, "Record created successfully", data);
     }
 
     update(data = {}) {
-        return this.custom_response(200, true, "Registro actualizado correctamente", data);
+        return this.custom_response(200, true, "Record updated sucessfully", data);
     }
 
-    get(data = {}, Message = "Datos solicitados") {
+    get(data = {}, Message = "") {
         return this.custom_response(200, true, Message, data);
-    }
-
-    download(file) {
-        return this.res.download(path.resolve(file));
-    }
-
-    send_file(file) {
-        return this.res.sendFile(path.resolve(file));
     }
 
     message(Message, Success = false) {

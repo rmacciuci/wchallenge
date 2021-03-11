@@ -1,3 +1,5 @@
+// Global settings
+jest.setTimeout(30000);
 
 // Include external modules
 const request = require('supertest');
@@ -6,7 +8,7 @@ const request = require('supertest');
 const app       = require('../app');
 
 // Connect to mongodb
-const connection = require('../databases').Databases.connect(["MONGODB"]);
+require('../databases').Databases.connect(["MONGODB"]);
 
 // Mocks
 const { MockUser } = require('./mocks');
@@ -24,7 +26,7 @@ const schemas = {
 }
 
 /** This function return a valid token */
-async function Get_Token_Test() {
+const Get_Token_Test = jest.fn( async () => {
     // Obtenemos el id del usuario de test
     let user = await schemas.users.find({ user_name: MockUser.user_name });
     const { _id } = user[0];
@@ -34,7 +36,9 @@ async function Get_Token_Test() {
     let token = new models.auth(MockUser);
     await token.delete_old_tokens();
     return await token.create_token();
-}
+})
+
+console.log = jest.fn(); // delete console.log to read the cleaner result 
 
 const BASE_URL = '/api/v1'; // Endpoints base URL.
 
@@ -157,6 +161,6 @@ describe('Coins test', () => {
 
 afterAll(async () => {
     // Delete created user
-    await models.users.delete(MockUser.user_name); // Eliminamos solo el usuario de test
-    await schemas.top_coins.remove(); // Eliminamos toda la collection of top_coins
+    await schemas.users.deleteMany({}); // Drop users collection
+    await schemas.top_coins.deleteMany({}); // Drop top_coins collection
 });

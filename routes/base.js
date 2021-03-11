@@ -5,21 +5,21 @@
  *
  * 
  * @author Ramiro Macciuci <ramimacciuci@gmail.com>
- * @copyright RM Dev - Argentina
+ * @copyright Ramiro Macciuci - Argentina
  *
  * History:
  * 1.0 - Version principal
  */
-// Incluimos modulos externos
+// Include exteranal modules
 const express = require('express');
 const router  = express.Router();
 
-// Incluimos controladores
+// Include Controllers
 const controllers = {
     main: require('../controllers/main')
 }
 
-// Methods
+// Routes
 router.post("/login", controllers.main.login);
 
 module.exports = router;

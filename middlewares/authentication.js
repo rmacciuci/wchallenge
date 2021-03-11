@@ -11,11 +11,11 @@
  * 1.0 - Version principal
  */
 
-// Incluimos modulos externos
+// Include external modules
 const jwt                   = require('jsonwebtoken');
 const fs                    = require('fs');
 
-// Incluimos modulos internos
+// Include internal modules
 const { configfile }        = require('../helper');
 const Views                 = require('../views');
 
@@ -38,14 +38,11 @@ class Auth {
         return this;
     }
 
-    /**
-     * Eliminamos los tokens viejos en base a los parametros configurados en los archivos de configuracion
-     */
     async delete_old_tokens() {
-        // Obtenemos los tokens del usuario
+        // get user tokens
         const tokens = await schemas.token.find({ userId: this.user._id }).sort({ createdAt: -1 });
 
-        // Obtenemos los valores de seguridad para los tokens
+        // Get security values specified in setting file
         const { sessions_by_user } = configfile.security;
         const { expiresIn } = configfile.security.token;
         const now = Date.now();
@@ -56,10 +53,10 @@ class Auth {
         for(let i = 0; i < tokens.length; i++) {
             const token = tokens[i];
             if(session_number >= sessions_by_user) {
-                // sumamos el token para eliminarlo
+                // add token to array
                 Tokens_to_delete.push(token._id);
             } else {
-                // Consultamos si el token es valido en fecha
+                // Check if token is valid
                 const data = Date.parse(token.createdAt);
 
                 const expiresData = data + expiresIn;
@@ -77,7 +74,7 @@ class Auth {
     }
 
     /**
-     * Creamos un token
+     * Create a token
      * @param {Any} sessionId 
      */
     async create_token(sessionId = false) {
@@ -101,7 +98,7 @@ class Auth {
                 sessionId: TOKEN_DATA.sessionId
             })
     
-            await c.save(); // Guardamos el token en la bbdd
+            await c.save(); // Save a token in database
             return token;
         } catch (e) {
             throw e;
@@ -110,19 +107,19 @@ class Auth {
 }
 
 /**
- * Middelware que chequea el token ingresado. Si la ruta esta incluida en el archivo de configuracion entonces no lo solicitará, en caso contrario hara multiples verificaciones de seguridad.
+ * Middelware check a recibed token. If the route is specified in setting file, it will not require token
  * @param {Object} req 
  * @param {Object} res 
  * @param {Object} next 
  */
 async function checkToken(req, res, next) {
 
-    // Obtenemos los valores de la ubicacion 3 y 4 de la url
+    // Get a url values
     let url = req.url;
     url = url.split('?')[0]; // Quitamos los queries
     url = [url.split('/')[3] || false, url.split('/')[4] || false];
     
-    const { routesNotToken } = configfile.security; // Obtenemos las rutas que no requeriran token
+    const { routesNotToken } = configfile.security; // Get routes that do not require token
 
     for(const [ method, module, route ] of routesNotToken) {
         if(url && url[0] != module) continue;
@@ -132,7 +129,7 @@ async function checkToken(req, res, next) {
             return;
         }
     }
-    // Creamos el objeto de respuesta
+    // Create a response object
     const response = new Views(res);
 
     try {
@@ -150,11 +147,11 @@ async function checkToken(req, res, next) {
             if(!token_verification || token_verification.userId != token_response.id) throw new Error("Token adulterado");
             
             let user;
-            user = await models.users.get_loggin_user_data(token_response.id); // Obtenemos los datos del usuario logeado segun el token
+            user = await models.users.get(token_response.id); // Get a logged user object
 
             user.token  = auth_token;
 
-            // Guardamos los datos del usuario logeado en los objetos req y res
+            // Save logged user data in req and res
             req.authUser = user;
             res.authUser = user;
 

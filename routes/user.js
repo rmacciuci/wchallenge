@@ -5,22 +5,21 @@
  *
  * 
  * @author Ramiro Macciuci <ramimacciuci@gmail.com>
- * @copyright RM Dev - Argentina
+ * @copyright Ramiro Macciuci - Argentina
  *
  * History:
  * 1.0 - Version principal
  */
-// Incluimos modulos externos
+// Include external modules
 const express = require('express');
-
 const router  = express.Router();
 
-// Incluimos controladores
+// Include controllers
 const controllers = {
     users: require('../controllers/users')
 }
 
-// Methods
+// Routes
 router.get("/", controllers.users.get);
 router.post("/", controllers.users.new);
 

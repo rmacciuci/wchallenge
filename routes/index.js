@@ -1,18 +1,18 @@
 /**
- * @fileoverview Routes | routes main file 
- * Aqui se definen todas las rutas existentes en la app
+ * @fileoverview Routes | routes entry file 
+ * 
  * 
  * @version 1.0 
  * 
  * 
  * @author Ramiro Macciuci <ramimacciuci@gmail.com>
- * @copyright RM Dev - Argentina
+ * @copyright Ramiro Macciuci - Argentina
  * 
  * History:
  * 1.0 - Version principal
  */
 
-// Incluimos modulos externos
+// Include external modules
 const express       = require('express');
 const app           = express();
 const helper        = require('../helper');

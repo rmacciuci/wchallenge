@@ -1,23 +1,20 @@
 /**
- * @fileoverview Controller of coins
+ * @fileoverview Coins controller
  * 
  * @version 1.0
  * 
  * @author Ramiro Macciuci <ramimacciuci@gmail.com>
- * @copyright RM Dev - Argentina
+ * @copyright Ramiro Macciuci - Argentina
  * 
  * History:
  * 1.0 - Version principal
  */
 
-// Incluimos modulos externos
-
-// Incluimos modulos internos
+// Include internal modules
 const helper = require('../helper');
-
 const Views = require('../views');
 
-// Incluimos Controladores, Modelos & Schemas
+// Include Controllers, Modules & Schemas
 const models = {
     coingecko: require('../models/coingecko')
 };

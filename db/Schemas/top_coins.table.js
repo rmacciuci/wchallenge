@@ -10,11 +10,11 @@
  * History:
  * 1.0 - Version principal
  */
-// Incluimos modulos externos
+// Include external modules
 const mongoose          = require('mongoose');
 const Schema            = mongoose.Schema;
 
-// Incluimos modulos internos
+// Include internal modules
 const helper            = require("../../helper");
 
 const table = new Schema({

@@ -1,23 +1,20 @@
 /**
- * @fileoverview Controller of users
+ * @fileoverview Top Coins controller
  * 
  * @version 1.0
  * 
  * @author Ramiro Macciuci <ramimacciuci@gmail.com>
- * @copyright RM Dev - Argentina
+ * @copyright Ramiro Macciuci - Argentina
  * 
  * History:
  * 1.0 - Version principal
  */
 
-// Incluimos modulos externos
-
-// Incluimos modulos internos
+// Include internal modules
 const helper = require('../helper');
-
 const Views = require('../views');
 
-// Incluimos Controladores, Modelos & Schemas
+// Include Controllers, Modules & Schemas
 const models = {
     top_coins: require('../models/top_coins')
 };
@@ -27,7 +24,7 @@ const controller = {
         const response = new Views(res);
         
         models.top_coins.get(req.authUser.id, req.query).then(v => {
-            if(!v) return response.message("Error al obtener las monedas favoritas")
+            if(!v) return response.message("Internal error")
             else return response.get(v);
         }).catch(e => {
             console.log("Error: ", e);
@@ -39,7 +36,7 @@ const controller = {
 
         const { coin_id } = req.params;
         models.top_coins.toggle_assign(req.authUser.id, coin_id).then(v => {
-            if(!v) return response.message("Error interno")
+            if(!v) return response.message("Internal error")
             else return response.update(v);
         }).catch(e => {
             console.log("Error: ", e);
